@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>お支払い</title>
+  <link rel="stylesheet" href="04_payment.css">
+  <script src="04_payment.js" defer></script>
+  <!-- 
+    Amazon Pay SDKのスクリプトを読み込みます。
+    実際の連携時には、このコメントを解除してください。
+    <script async src="https://static-fe.payments-amazon.com/checkout.js"></script> 
+  -->
+</head>
+<body>
+  <h1>お支払い</h1>
+
+  <section class="payment-summary">
+    <h2>お支払い金額</h2>
+    <p class="total-amount" id="grandTotal">¥0</p>
+  </section>
+
+  <section class="payment-method">
+    <h2>お支払い方法</h2>
+    <p>以下のボタンをクリックして、Amazonアカウントでお支払いください。</p>
+    
+    <!-- Amazon Payボタンをレンダリングするためのコンテナ -->
+    <div id="amazonPayButton"></div>
+    
+    <p class="note">
+      ※ Amazon Payの画面に移動します。お支払いが完了すると、自動的に注文完了ページに戻ります。
+    </p>
+  </section>
+
+  <div class="button-container">
+    <button type="button" onclick="location.href='03_confirm.html'">注文内容の確認に戻る</button>
+  </div>
+
+</body>
+</html>

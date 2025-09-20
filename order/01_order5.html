@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>商品注文画面</title>
+  <link rel="stylesheet" href="01_order.css">
+  <script src="01_order.js" defer></script>
+  <style>
+    .button-container {
+      margin-top: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: 1px solid transparent;
+      margin-right: 10px;
+    }
+    button[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      border-color: #28a745;
+    }
+    button[type="button"] {
+      background-color: #6c757d;
+      color: white;
+      border-color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <h1>商品の選択</h1>
+
+  <form id="orderForm" action="02_address.html">
+    <!-- 商品表示エリア -->
+    <div id="productContainer"></div>
+
+    <!-- コメント -->
+    <section>
+      <h2>コメント</h2>
+      <textarea name="comment" rows="8" cols="50" placeholder="ご要望などをご記入ください（例：アイコンに寄せたお顔に変更してください）"></textarea>
+      <p>※ 立ちスタイルのお顔はシンプル、座りスタイルのお顔はアイコンに寄せたデザインを基本としています。変更をご希望の場合は、コメント欄にご記入ください。</p>
+    </section>
+
+    <!-- 合計金額確認ボタン -->
+    <button type="button" onclick="calculateTotal()">合計金額を確認する</button>
+
+     <!-- 合計金額表示 -->
+    <div>
+      <h3>合計金額</h3>
+      <span id="totalPrice">¥0</span>
+    </div>
+
+    <!-- 合計サイズ表示 -->
+    <div>
+      <h3>合計サイズ</h3>
+      <span id="totalSize">0</span>
+    </div>
+
+    <div class="button-container">
+      <!-- 注文ボタン -->
+      <button type="submit">この内容で注文する</button>
+    </div>
+  </form>
+
+</body>
+</html>

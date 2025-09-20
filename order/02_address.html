@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>配送先情報のご入力</title>
+  <link rel="stylesheet" href="02_address.css">
+  <style>
+    .form-group {
+      margin-bottom: 1.2em; /* 各入力グループの下に余白を追加して見やすくします */
+    }
+    .form-note {
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 4px;
+      margin-bottom: 0;
+      line-height: 1.4;
+    }
+    .optional-badge {
+      font-size: 0.8em;
+      font-weight: normal;
+      background-color: #f0f0f0;
+      color: #555;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+    #calculateShippingFeeButton {
+      margin-top: 20px; /* ボタンの上に余白を追加 */
+    }
+    .button-container {
+      margin-top: 30px;
+    }
+  </style>
+  <script src="02_address.js" defer></script>
+  <script>
+    function fetchAddress() {
+      const zip = document.getElementById("zipcode").value;
+      const url = `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.results) {
+            const result = data.results[0];
+            // 都道府県、市区町村、町域名をすべて連結して「住所1」に設定
+            const address1Value = `${result.address1}${result.address2}${result.address3}`;
+            document.getElementById("address1").value = address1Value;
+            // 「住所2」は空にして、番地の入力を促す
+            document.getElementById("address2").value = "";
+            document.getElementById("address2").focus(); // 番地の追加入力を促す
+          } else {
+            alert("住所が見つかりませんでした。郵便番号を確認してください。");
+            document.getElementById("address1").value = "";
+            document.getElementById("address2").value = "";
+          }
+        })
+        .catch(error => {
+          console.error("エラー:", error);
+          alert("住所の取得に失敗しました。");
+        });
+    }
+  </script>
+</head>
+<body>
+  <h1>配送先情報のご入力</h1>
+
+  <form id="customerForm" action="03_confirm.html">
+    <div class="form-group">
+      <label for="name">お名前：</label><br>
+      <input type="text" id="name" name="name" size="50" placeholder="例：山田 太郎" required />
+    </div>
+
+    <div class="form-group">
+      <label for="zipcode">郵便番号（ハイフンなし）：</label><br>
+      <input type="text" id="zipcode" name="zipcode" maxlength="7" onblur="fetchAddress()" placeholder="例: 1000001" />
+    </div>
+
+    <div class="form-group">
+      <label for="address1">住所1（都道府県・市区町村）：</label><br>
+      <input type="text" id="address1" name="address1" size="50" required />
+    </div>
+    <div class="form-group">
+      <label for="address2">住所2（丁目・番地）：</label><br>
+      <input type="text" id="address2" name="address2" size="50" placeholder="例：1-2-3" required />
+    </div>
+    <div class="form-group">
+      <label for="address3">住所3（建物名・部屋番号）：</label><br>
+      <input type="text" id="address3" name="address3" size="50" placeholder="例： 〇〇マンション 101号室" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">メールアドレス：</label><br>
+      <input type="email" id="email" name="email" size="50" placeholder="例：example@example.com" required />
+    </div>
+
+    <div class="form-group">
+      <label for="tel">電話番号：<span class="optional-badge">任意</span></label><br>
+      <input type="tel" id="tel" name="tel" size="30" placeholder="例：012-345-6789" />
+      <p class="form-note">電話番号のご入力は任意ですが、なんらかの理由で配達が行えなかった場合に配送業者から連絡ができるよう、なるべくご入力ください。</p>
+    </div>
+
+    <div class="form-group">
+      <label for="shippingMethod">配送方法：</label><br>
+      <select id="shippingMethod" name="shippingMethod" required>
+        <option value="">-- 配送方法を選択してください --</option>
+      </select>
+    </div>
+
+    <button type="button" id="calculateShippingFeeButton">送料を確認する</button>
+
+    <div class="form-group">
+      <h3>ご注文金額</h3>
+      <span id="orderTotal">¥0</span>
+    </div>
+
+    <div class="form-group">
+      <h3>送料</h3>
+      <span id="shippingFee">¥0</span>
+    </div>
+
+    <div class="form-group">
+      <h3>合計金額（送料込み）</h3>
+      <span id="grandTotal">¥0</span>
+    </div>
+
+    <div class="button-container">
+      <button type="button" onclick="location.href='01_order5.html'">商品選択に戻る</button>
+      <button type="submit">入力内容の確認へ進む</button>
+    </div>
+  </form>
+</body>
+</html>

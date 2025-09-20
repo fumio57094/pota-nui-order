@@ -1,0 +1,15 @@
+shipfee_admin.xlsx
+送料管理用のファイル。変更、更新はこのファイルで行う。
+
+
+shipfee.xlsx
+クエリで、shipfee_admin.xlsxの各シートを読み込み、立て結合する。
+これをcsvで保存する（手動）。
+
+shipfee.csv
+javascriptで使用する。
+
+
+products.csv
+javascriptで使用する。
+今のところ、編集もここでする。

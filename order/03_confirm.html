@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>入力内容のご確認</title>
+  <link rel="stylesheet" href="03_confirm.css">
+  <script src="03_confirm.js" defer></script>
+</head>
+<body>
+  <h1>入力内容のご確認</h1>
+  <p>ご注文内容をご確認の上、お間違いがなければ「お支払いに進む」ボタンを押してください。</p>
+
+  <section>
+    <h2>ご注文商品</h2>
+    <ul id="orderList">
+      <!-- JavaScriptで商品リストがここに追加されます -->
+    </ul>
+  </section>
+
+  <section>
+    <h2>コメント</h2>
+    <p id="commentDisplay">なし</p>
+  </section>
+
+  <section>
+    <h2>お客様情報</h2>
+    <dl>
+      <dt>お名前</dt>
+      <dd id="customerName"></dd>
+      <dt>ご住所</dt>
+      <dd id="customerAddress"></dd>
+      <dt>メールアドレス</dt>
+      <dd id="customerEmail"></dd>
+      <dt>電話番号</dt>
+      <dd id="customerTel"></dd>
+      <dt>配送方法</dt>
+      <dd id="shippingMethod"></dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>お支払い金額</h2>
+    <dl>
+      <dt>ご注文金額</dt>
+      <dd id="orderTotal"></dd>
+      <dt>送料</dt>
+      <dd id="shippingFee"></dd>
+      <dt>合計金額（送料込み）</dt>
+      <dd id="grandTotal"></dd>
+    </dl>
+  </section>
+
+  <form id="finalOrderForm" action="04_payment.html">
+    <button type="button" onclick="history.back()">入力画面に戻る</button>
+    <button type="submit">お支払いに進む</button>
+  </form>
+
+</body>
+</html>
