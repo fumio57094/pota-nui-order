@@ -1,0 +1,81 @@
+/* 全体のフォントや余白を調整 */
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* 商品ごとのコンテナ設定 */
+.product {
+  display: flex;          /* Flexboxレイアウトを有効にする */
+  flex-direction: column; /* 子要素を縦方向に並べる */
+  align-items: flex-start;/* 子要素を左揃えにする */
+  margin-bottom: 1rem;    /* 各商品の下に1文字分の余白を追加 */
+}
+
+/* ラベルのスタイル */
+.product label {
+  margin-bottom: 0.25rem; /* ラベルとプルダウンの間に少し余白を追加 */
+}
+
+/* プルダウン（数量選択）のスタイル */
+.product .quantity {
+  width: 100px; /* プルダウンの幅を100pxに固定 */
+}
+
+/* 注意書きのスタイル */
+.product-description {
+  font-size: 0.9em;
+  color: #d32f2f; /* 少し目立つ赤系の色 */
+  margin: 4px 0 8px 0; /* 上下の余白を調整 */
+  padding-left: 1em; /* 少しインデント */
+}
+
+/* グループごとのセクションの余白 */
+section {
+    margin-bottom: 1.5rem;
+}
+
+/* ▼▼▼ 折りたたみ機能のためのスタイルを追加 ▼▼▼ */
+
+/* クリック可能なグループタイトル */
+.group-title {
+    cursor: pointer;          /* カーソルを指マークに変更 */
+    user-select: none;        /* テキストの選択を無効化 */
+    position: relative;
+    padding: 8px 12px;
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.group-title:hover {
+    background-color: #e9e9e9;
+}
+
+/* 開閉状態を示す矢印（▶） */
+.group-title::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 0.8em;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* 開いている状態の矢印を回転させる */
+.group-title.is-open::before {
+    transform: rotate(90deg);
+}
+
+/* 商品リストのコンテナ（標準で非表示） */
+.product-list {
+    display: none;
+}
+
+/* 開いている状態の商品リストを表示する */
+.product-list.is-open {
+    display: block;
+    padding-top: 10px; /* 開いたときに少し余白を入れる */
+}
+
+
