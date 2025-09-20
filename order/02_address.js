@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('注文情報がセッションストレージに見つかりません。');
     alert('注文情報が見つかりませんでした。お手数ですが、もう一度商品を選択してください。');
     // 注文ページにリダイレクトする
-    window.location.href = '01_order5.html';
+    window.location.href = 'index.html';
   }
 
   // 「送料を確認する」ボタンのイベントリスナーを追加

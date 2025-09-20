@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 必須情報が欠けている場合は、前のページに戻す
   if (!ordersJSON || !customerInfoJSON || !totalPrice || !shippingFee || !grandTotal) {
     alert('注文情報が不足しています。お手数ですが、最初からやり直してください。');
-    window.location.href = '01_order5.html';
+    window.location.href = 'index.html';
     return;
   }
 

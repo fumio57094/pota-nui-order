@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 金額情報がない場合は、最初のページに戻す
   if (!grandTotal) {
     alert('お支払い情報が見つかりませんでした。お手数ですが、最初からやり直してください。');
-    window.location.href = '01_order5.html';
+    window.location.href = 'index.html';
     return;
   }
 
