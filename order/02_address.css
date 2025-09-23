@@ -50,3 +50,13 @@ button[type="button"] {
   color: white;
   border-color: #6c757d;
 }
+
+.button-container {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap; /* 画面幅に応じてボタンを折り返す */
+  gap: 10px; /* ボタン間の隙間を縦横10pxに設定 */
+}
+.button-container button {
+  margin-right: 0; /* gapを使うので、既存の右マージンをリセット */
+}
