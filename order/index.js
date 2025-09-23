@@ -4,31 +4,78 @@ const productsData = {};
 let isTotalCalculated = false;
 
 // DOMの読み込みが完了したら、商品リストの読み込みを開始
-document.addEventListener('DOMContentLoaded', () => {
-  loadProducts();
+document.addEventListener('DOMContentLoaded', async () => {
+  // ページ初期化時に商品データと送料データを並行して読み込む
+  await loadProducts()
+  .catch(error => {
+    console.error('ページの初期化中にエラーが発生しました:', error);
+    const container = document.getElementById('productContainer');
+    if (container) {
+      container.textContent = 'ページの読み込みに失敗しました。お手数ですが、ページを再読み込みしてください。';
+    }
+  });
 
   // フォームのsubmitイベントを捕捉し、送信前に最終処理を行う
   const orderForm = document.getElementById('orderForm');
   if (orderForm) {
     orderForm.addEventListener('submit', (event) => {
+      event.preventDefault(); // フォームの送信を一旦キャンセル
+
+      // 現在選択されている配送方法を一時的に保持
+      const shippingMethodSelect = document.getElementById('shippingMethod');
+      const previouslySelectedMethod = shippingMethodSelect.value;
+
       // 合計金額が確認されていない場合は、フォーム送信を中止
       if (!isTotalCalculated) {
         alert('「合計金額を確認する」ボタンを押して、金額を確認してください。');
-        event.preventDefault(); // フォームの送信をキャンセル
         return;
       }
 
       // ページ遷移の直前に、最新の状態で合計計算とセッションストレージへの保存を実行
       // 数量変更後に確認ボタンを押さずに注文ボタンを押した場合にも対応するため、ここで再度計算する
-      calculateTotal();
+      if (!calculateTotal()) { // バリデーション等で失敗した場合は中断
+        return;
+      }
+
+      // calculateTotal()でプルダウンが再生成された後、以前の選択値を復元する
+      // これにより、数量変更後に「合計確認」を押さずに注文した場合でも選択が維持される
+      shippingMethodSelect.value = previouslySelectedMethod;
 
       // 合計金額が0円（=何も選択されていない）の場合、フォーム送信を中止してアラートを表示
       const totalPrice = sessionStorage.getItem('totalPrice');
       if (!totalPrice || Number(totalPrice) === 0) {
         alert('商品が選択されていません。');
-        event.preventDefault(); // フォームの送信（ページ遷移）をキャンセル
+        return;
       }
-      // 注文がある場合は、デフォルトのsubmit動作（action属性へのページ遷移）が実行される
+
+      // 配送方法が選択されているかチェック
+      const selectedMethod = shippingMethodSelect.value;
+
+      if (!selectedMethod) {
+        alert('配送方法を選択してください。');
+        shippingMethodSelect.focus();
+        return;
+      }
+
+      // 選択された配送方法をsessionStorageに保存
+      sessionStorage.setItem('shippingMethod', selectedMethod);
+
+      // 配送方法に応じて遷移先を決定
+      let nextPage = '';
+      if (selectedMethod.includes('郵便局')) {
+        nextPage = '02_address2.html';
+      } else if (selectedMethod.includes('匿名')) {
+        nextPage = '02_address3.html';
+      } else {
+        // 上記以外はすべて自宅配送とみなす
+        nextPage = '02_address.html';
+      }
+
+      // フォームのaction属性と、確認画面からの「戻る」ボタン用の情報を設定
+      orderForm.action = nextPage;
+
+      // フォームをプログラム的に送信
+      orderForm.submit();
     });
   }
 });
@@ -47,7 +94,7 @@ async function loadProducts() {
     const csvText = await response.text();
 
     // CSVをパースして商品データ配列を取得
-    const allProducts = parseCSV(csvText);
+    const allProducts = parseProductCSV(csvText);
 
     // statusが'on'の商品のみに絞り込む
     const products = allProducts.filter(p => p.status === 'on');
@@ -139,11 +186,11 @@ async function loadProducts() {
 }
 
 /**
- * CSV形式のテキストをパースし、オブジェクトの配列に変換します。
+ * 商品CSV形式のテキストをパースし、オブジェクトの配列に変換します。
  * @param {string} csvText - CSV形式のテキストデータ
  * @returns {Array<Object>} 商品オブジェクトの配列
  */
-function parseCSV(csvText) {
+function parseProductCSV(csvText) {
   const lines = csvText.trim().split(/\r?\n/);
   const headers = lines.shift().split(',').map(h => h.trim());
 
@@ -196,6 +243,7 @@ function groupProducts(products) {
 
 /**
  * 選択された商品の合計金額を計算し、表示します。
+ * @returns {boolean} バリデーションに成功した場合はtrue、失敗した場合はfalse
  */
 function calculateTotal() {
     let totalPrice = 0;
@@ -250,18 +298,20 @@ function calculateTotal() {
     // バリデーション：骨格の数量が基本セットの数量を超えている場合はエラーを表示して処理を中断
     if (qtyLStyleSkeleton > qtyLStyleBaseSet) {
         alert('「骨格_Lサイズ用」の数量が「L立ちスタイル基本セット」の数量を超えています。');
-        return; // これ以降の処理を中断
+        return false; // これ以降の処理を中断
     }
     if (qtySStyleSkeleton > qtySStyleBaseSet) {
         alert('「骨格_Sサイズ用」の数量が「Sサイズ基本セット」の数量を超えています。');
-        return; // これ以降の処理を中断
+        return false; // これ以降の処理を中断
     }
 
     const totalPriceElement = document.getElementById('totalPrice');
     totalPriceElement.textContent = `¥${totalPrice.toLocaleString()}`;
 
     const totalSizeElement = document.getElementById('totalSize');
-    totalSizeElement.textContent = totalSize.toLocaleString();
+    if (totalSizeElement) {
+      totalSizeElement.textContent = totalSize.toLocaleString();
+    }
 
     // コメント欄の内容を取得
     const commentText = document.querySelector('textarea[name="comment"]').value;
@@ -275,4 +325,101 @@ function calculateTotal() {
 
     // 計算が完了したことを示すフラグを立てる
     isTotalCalculated = true;
+
+    // 合計サイズに基づいて配送方法の選択肢を生成・表示
+    populateShippingOptions(totalSize, orders);
+
+    return true; // 成功
+}
+
+/**
+ * 注文内容に基づいて配送方法の選択肢をプルダウンに設定します。
+ * (shipping_option_utf8bom.ps1 のロジックをJavaScriptに移植)
+ * @param {number} totalSize - 注文の合計サイズ
+ * @param {Array<Object>} orders - 注文内容の配列
+ */
+function populateShippingOptions(totalSize, orders) {
+  const shippingMethodSelect = document.getElementById('shippingMethod');
+  const shippingContainer = document.getElementById('shippingMethodContainer');
+
+  // 既存の選択肢をクリア（「選択してください」は残す）
+  while (shippingMethodSelect.options.length > 1) {
+    shippingMethodSelect.remove(1);
+  }
+
+  let shipOption = [];
+
+  // 注文内容を分析
+  const b_orders = orders.filter(o => o.productcd.includes('B'));
+  const sb_orders = orders.filter(o => o.productcd.includes('SB'));
+  const lb_orders = orders.filter(o => o.productcd.includes('LB'));
+  const lb101_orders = orders.filter(o => o.productcd.includes('101_LB'));
+
+  // 1. 着せ替え、アイテムのみ（基本セットなし）
+  if (b_orders.length === 0) {
+    if (totalSize <= 360) {
+      shipOption = [
+        "レターパックライト",
+        "クロネコ宅急便コンパクトの匿名配送"
+      ];
+    } else { // totalSize > 360
+      shipOption = [
+        "レターパックプラス",
+        "クロネコ宅急便コンパクトの匿名配送"
+      ];
+    }
+  }
+  // 2. S基本 + その他（L基本なし）
+  else if (sb_orders.length > 0 && lb_orders.length === 0) {
+    if (totalSize <= 720) {
+      shipOption = [
+        "レターパックプラス",
+        "クロネコ宅急便コンパクトの匿名配送"
+      ];
+    } else if (totalSize > 720 && totalSize <= 1160) {
+      shipOption = [
+        "レターパックプラス",
+        "クロネコ宅急便の匿名配送（60サイズ）"
+      ];
+    }
+  }
+  // 3. L基本が含まれている
+  else if (lb_orders.length > 0) {
+    // 3-1. L基本立位のみ + その他
+    if (lb101_orders.length > 0 && totalSize <= 1160) {
+      shipOption = [
+        "レターパックプラス",
+        "ゆうパックで郵便局受け取り(60サイズ)",
+        "ゆうパック(60サイズ)",
+        "クロネコ宅急便の匿名配送(60サイズ)"
+      ];
+    }
+    // 3-2. L基本立位and/or座位 + その他
+    else if (totalSize <= 2799) {
+      shipOption = [
+        "ゆうパックで郵便局受け取り(60サイズ)",
+        "ゆうパック(60サイズ)",
+        "クロネコ宅急便の匿名配送(60サイズ)"
+      ];
+    } else { // totalSize > 2799
+      shipOption = [
+        "ゆうパックで郵便局受け取り(80サイズ)",
+        "ゆうパック(80サイズ)",
+        "クロネコ宅急便の匿名配送(80サイズ)"
+      ];
+    }
+  }
+
+  // プルダウンメニューに選択肢を追加
+  if (shipOption.length > 0) {
+    shipOption.forEach(optionText => {
+      const option = document.createElement('option');
+      option.value = optionText;
+      option.textContent = optionText;
+      shippingMethodSelect.appendChild(option);
+    });
+  }
+
+  // 配送方法セクションを表示
+  shippingContainer.style.display = 'block';
 }

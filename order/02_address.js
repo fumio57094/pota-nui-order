@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const totalSize = sessionStorage.getItem('totalSize');
   const commentText = sessionStorage.getItem('commentText');
   const ordersJSON = sessionStorage.getItem('orders');
+  const shippingMethodFromSession = sessionStorage.getItem('shippingMethod');
 
   // 'orders'はJSON文字列として保存されているため、JavaScriptオブジェクトにパースする
   const orders = ordersJSON ? JSON.parse(ordersJSON) : [];
@@ -23,6 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 注文金額を初期表示
     document.getElementById('orderTotal').textContent = `¥${Number(totalPrice).toLocaleString()}`;
 
+    // 配送方法を表示
+    const shippingMethodDisplay = document.getElementById('shippingMethodDisplay');
+    if (shippingMethodDisplay) {
+      shippingMethodDisplay.textContent = shippingMethodFromSession || '（未選択）';
+    }
+
     // 取得したデータを使ってページの内容を更新するなどの処理をここに追加します。
     // 例として、コンソールに取得した情報を出力します。
     console.log('--- 注文情報 ---');
@@ -30,9 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('合計サイズ:', totalSize);
     console.log('注文内容:', orders);
     console.log('コメント:', commentText);
-
-    // 注文内容に基づいて配送方法の選択肢を生成する
-    populateShippingOptions(Number(totalSize), orders);
 
   } else {
     // 注文情報がsessionStorageにない場合の処理
@@ -67,11 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // 配送方法が選択されているかチェック（必須項目なのでcheckValidityでカバーされるが念のため）
-      const shippingMethod = document.getElementById('shippingMethod').value;
+      const shippingMethod = sessionStorage.getItem('shippingMethod');
       if (!shippingMethod) {
-        alert('配送方法を選択してください。');
-        document.getElementById('shippingMethod').focus();
+        alert('配送方法が設定されていません。お手数ですが、商品選択画面からやり直してください。');
         return;
       }
 
@@ -185,7 +187,7 @@ function calculateShippingFee() {
   const form = document.getElementById('customerForm');
   // 必須項目が入力されているかチェック
   if (!form.checkValidity()) {
-    alert('お名前、住所、メールアドレス、配送方法など、必須項目をすべて入力してください。');
+    alert('お名前、住所、メールアドレスなど、必須項目をすべて入力してください。');
     const firstInvalid = form.querySelector(':invalid');
     if (firstInvalid) {
       firstInvalid.focus();
@@ -193,7 +195,7 @@ function calculateShippingFee() {
     return false;
   }
 
-  const shippingMethod = document.getElementById('shippingMethod').value;
+  const shippingMethod = sessionStorage.getItem('shippingMethod');
   const address1 = document.getElementById('address1').value;
 
   // 住所1から都道府県を抽出
@@ -244,86 +246,4 @@ function calculateShippingFee() {
   // 計算済みフラグを立てる
   isShippingFeeCalculated = true;
   return true;
-}
-
-/**
- * 注文内容に基づいて配送方法の選択肢をプルダウンに設定します。
- * (shipping_option_utf8bom.ps1 のロジックをJavaScriptに移植)
- * @param {number} totalSize - 注文の合計サイズ
- * @param {Array<Object>} orders - 注文内容の配列
- */
-function populateShippingOptions(totalSize, orders) {
-  let shipOption = [];
-
-  // 注文内容を分析
-  const b_orders = orders.filter(o => o.productcd.includes('B'));
-  const sb_orders = orders.filter(o => o.productcd.includes('SB'));
-  const lb_orders = orders.filter(o => o.productcd.includes('LB'));
-  const lb101_orders = orders.filter(o => o.productcd.includes('101_LB'));
-
-  // 1. 着せ替え、アイテムのみ（基本セットなし）
-  if (b_orders.length === 0) {
-    if (totalSize <= 360) {
-      shipOption = [
-        "レターパックライト",
-        "クロネコ宅急便コンパクトの匿名配送"
-      ];
-    } else { // totalSize > 360
-      shipOption = [
-        "レターパックプラス",
-        "クロネコ宅急便コンパクトの匿名配送"
-      ];
-    }
-  }
-  // 2. S基本 + その他（L基本なし）
-  else if (sb_orders.length > 0 && lb_orders.length === 0) {
-    if (totalSize <= 720) {
-      shipOption = [
-        "レターパックプラス",
-        "クロネコ宅急便コンパクトの匿名配送"
-      ];
-    } else if (totalSize > 720 && totalSize <= 1160) {
-      shipOption = [
-        "レターパックプラス",
-        "クロネコ宅急便の匿名配送（60サイズ）"
-      ];
-    }
-  }
-  // 3. L基本が含まれている
-  else if (lb_orders.length > 0) {
-    // 3-1. L基本立位のみ + その他
-    if (lb101_orders.length > 0 && totalSize <= 1160) {
-      shipOption = [
-        "レターパックプラス",
-        "ゆうパックで郵便局受け取り(60サイズ)",
-        "ゆうパック(60サイズ)",
-        "クロネコ宅急便の匿名配送(60サイズ)"
-      ];
-    }
-    // 3-2. L基本立位and/or座位 + その他
-    else if (totalSize <= 2799) {
-      shipOption = [
-        "ゆうパックで郵便局受け取り(60サイズ)",
-        "ゆうパック(60サイズ)",
-        "クロネコ宅急便の匿名配送(60サイズ)"
-      ];
-    } else { // totalSize > 2799
-      shipOption = [
-        "ゆうパックで郵便局受け取り(80サイズ)",
-        "ゆうパック(80サイズ)",
-        "クロネコ宅急便の匿名配送(80サイズ)"
-      ];
-    }
-  }
-
-  // プルダウンメニューに選択肢を追加
-  const shippingSelect = document.getElementById('shippingMethod');
-  if (shipOption.length > 0) {
-    shipOption.forEach(optionText => {
-      const option = document.createElement('option');
-      option.value = optionText;
-      option.textContent = optionText;
-      shippingSelect.appendChild(option);
-    });
-  }
 }

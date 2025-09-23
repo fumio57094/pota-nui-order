@@ -30,6 +30,16 @@
     .button-container {
       margin-top: 30px;
     }
+    .display-value {
+      font-size: 16px;
+      padding: 8px;
+      background-color: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      width: 300px;
+      margin: 5px 0 0 0;
+      min-height: 1.5em;
+    }
   </style>
   <script src="02_address.js" defer></script>
   <script>
@@ -100,10 +110,8 @@
     </div>
 
     <div class="form-group">
-      <label for="shippingMethod">配送方法：</label><br>
-      <select id="shippingMethod" name="shippingMethod" required>
-        <option value="">-- 配送方法を選択してください --</option>
-      </select>
+      <label>配送方法：</label>
+      <p id="shippingMethodDisplay" class="display-value"></p>
     </div>
 
     <button type="button" id="calculateShippingFeeButton">送料を確認する</button>
@@ -124,7 +132,7 @@
     </div>
 
     <div class="button-container">
-      <button type="button" onclick="location.href='index.html'">商品選択に戻る</button>
+      <button type="button" onclick="history.back()">商品選択に戻る</button>
       <button type="submit">入力内容の確認へ進む</button>
     </div>
   </form>

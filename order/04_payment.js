@@ -60,8 +60,34 @@ document.addEventListener('DOMContentLoaded', () => {
   dummyButton.className = 'dummy-amazon-pay-button';
   dummyButton.textContent = 'Amazon Pay で支払う（開発用ダミー）';
   dummyButton.onclick = () => {
+    // --- 注文番号を生成 ---
+    const generateOrderId = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      // 重複確率をさらに下げるためのランダムな文字列
+      const randomPart = Math.random().toString(36).slice(-5).toUpperCase();
+      return `${year}${month}${day}-${hours}${minutes}${seconds}-${randomPart}`;
+    };
+    const orderId = generateOrderId();
+
+    // 注文番号をsessionStorageに保存
+    sessionStorage.setItem('orderId', orderId);
+
+    // TODO: 本番実装時には、ここでサーバーに最終的な注文データを送信します。
     alert('決済が完了したと仮定して、完了ページへ進みます。');
-    window.location.href = '05_complete.html'; // 完了画面のファイル名に合わせてください
+    
+    // location.hrefによるリダイレクトではなく、フォームを生成して送信することで、
+    // file:// プロトコルなど特定の環境下でのセッションストレージの引き継ぎ問題を回避します。
+    const form = document.createElement('form');
+    form.method = 'GET';
+    form.action = '05_complete.html';
+    document.body.appendChild(form);
+    form.submit();
   };
   document.getElementById('amazonPayButton').appendChild(dummyButton);
 });

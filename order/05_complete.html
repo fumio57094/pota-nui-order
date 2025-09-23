@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ご注文完了</title>
+  <link rel="stylesheet" href="05_complete.css">
+  <script src="05_complete.js" defer></script>
+</head>
+<body>
+  <h1>ご注文ありがとうございました</h1>
+  
+  <div class="message-container">
+    <p id="completionMessage">ご注文を承りました。</p>
+    <p>ご注文内容の確認メールを、ご登録のメールアドレス宛にお送りしました。</p>
+  </div>
+
+  <section class="resend-email">
+    <h2>メールが届かない場合</h2>
+    <p>
+      迷惑メールフォルダに振り分けられていないかご確認ください。<br>
+      それでもメールが見つからない場合は、以下のボタンから確認メールを再送できます。
+    </p>
+    <button type="button" id="resendEmailButton">確認メールを再送する</button>
+    <p id="resendStatusMessage" class="status-message"></p>
+  </section>
+
+  <div class="button-container">
+    <button type="button" onclick="location.href='index.html'">トップページに戻る</button>
+  </div>
+</body>
+</html>

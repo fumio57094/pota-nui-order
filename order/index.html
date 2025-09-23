@@ -27,6 +27,33 @@
       color: white;
       border-color: #6c757d;
     }
+
+    /* プルダウンメニューの共通スタイル */
+    #shippingMethod, .quantity {
+      padding: 8px 12px;
+      font-size: 16px;
+      border: 1px solid #ced4da;
+      border-radius: 4px; /* 角の丸み */
+      height: 40px; /* 高さ */
+      background-color: white;
+      box-sizing: border-box;
+    }
+
+    /* 配送方法のプルダウン */
+    #shippingMethod {
+      width: 100%;
+      max-width: 450px; /* PCでの表示幅を調整 */
+    }
+
+    /* コメント欄のスタイル */
+    textarea[name="comment"] {
+      width: 100%;
+      max-width: 600px; /* PCで見たときの最大幅 */
+      box-sizing: border-box; /* paddingとborderを幅に含める */
+      padding: 8px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -39,8 +66,11 @@
     <!-- コメント -->
     <section>
       <h2>コメント</h2>
-      <textarea name="comment" rows="8" cols="50" placeholder="ご要望などをご記入ください（例：アイコンに寄せたお顔に変更してください）"></textarea>
-      <p>※ 立ちスタイルのお顔はシンプル、座りスタイルのお顔はアイコンに寄せたデザインを基本としています。変更をご希望の場合は、コメント欄にご記入ください。</p>
+      <textarea name="comment" rows="8" cols="50" placeholder="ご要望などをご記入ください（例：アイコンに寄せたお顔に変更してください。聴診器は紺にしてください。）"></textarea>
+      <p>※ 立ちスタイルのお顔はシンプル、座りスタイルのお顔はアイコンに寄せたデザインを基本としています。<br>
+        ※ 聴診器の色は基本はミントグリーンですが、紺または黒に変更できます。<br>
+        変更をご希望の場合は、コメント欄にご記入ください。
+      </p>
     </section>
 
     <!-- 合計金額確認ボタン -->
@@ -53,9 +83,20 @@
     </div>
 
     <!-- 合計サイズ表示 -->
+    <!--
     <div>
       <h3>合計サイズ</h3>
       <span id="totalSize">0</span>
+    </div>
+    -->
+
+    <!-- 配送方法選択 -->
+    <div id="shippingMethodContainer" style="display: none;">
+      <h3>配送方法</h3>
+      <select id="shippingMethod" name="shippingMethod" required>
+        <option value="">-- 配送方法を選択してください --</option>
+      </select>
+      <p>※ 配送方法によって、次の画面で入力する情報が異なります。</p>
     </div>
 
     <div class="button-container">
