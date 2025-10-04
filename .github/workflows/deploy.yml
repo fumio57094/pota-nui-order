@@ -22,12 +22,12 @@ jobs:
       - name: Create config.js from template
         run: |
           # テンプレートをコピー
-          cp config.template.js config.js
+          cp order/config.template.js order/config.js
           # GitHub SecretsからURLを読み込み、プレースホルダーを置換
           # sedコマンドでURL内の特殊文字をエスケープして安全に置換する
           URL_TO_REPLACE="YOUR_GOOGLE_FORM_URL_HERE"
           SECRET_URL="${{ secrets.GOOGLE_FORM_URL }}"
-          sed -i "s|${URL_TO_REPLACE}|${SECRET_URL}|g" config.js
+          sed -i "s|${URL_TO_REPLACE}|${SECRET_URL}|g" order/config.js
         shell: bash
 
       # 3. GitHub Pagesにデプロイするための設定
