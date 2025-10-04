@@ -13,6 +13,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # ワークフローに与える権限を設定
+    permissions:
+      contents: read      # リポジトリのコンテンツを読み取る権限
+      pages: write        # GitHub Pagesにデプロイする権限
+      id-token: write     # デプロイ時の認証に必要な権限
+
     steps:
       # 1. リポジトリのコードをチェックアウト
       - name: Checkout repository
