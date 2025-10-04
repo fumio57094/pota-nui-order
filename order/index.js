@@ -87,7 +87,8 @@ async function loadProducts() {
   const container = document.getElementById('productContainer');
   try {
     // CSVファイルを取得
-    const response = await fetch('files/products.csv');
+    // キャッシュを回避するため、URLにタイムスタンプを付与する（キャッシュバスティング）
+    const response = await fetch(`files/products.csv?v=${new Date().getTime()}`);
     if (!response.ok) {
       throw new Error(`CSVファイルの読み込みに失敗しました: ${response.statusText}`);
     }
