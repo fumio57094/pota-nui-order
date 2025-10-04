@@ -38,7 +38,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # プロジェクトのルートディレクトリ全体をアップロード
+          path: './order' # 公開したいサイトのファイルが含まれる'order'フォルダを指定
 
       # 5. GitHub Pagesにデプロイを実行
       - name: Deploy to GitHub Pages
