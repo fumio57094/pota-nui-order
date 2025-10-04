@@ -1,0 +1,46 @@
+# GitHub Pagesへのデプロイを自動化するワークフロー
+
+name: Deploy to GitHub Pages
+
+on:
+  # mainブランチにプッシュされたときに実行
+  push:
+    branches:
+      - main
+  # Actionsタブから手動で実行することも可能にする
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. config.template.js から config.js を生成
+      - name: Create config.js from template
+        run: |
+          # テンプレートをコピー
+          cp config.template.js config.js
+          # GitHub SecretsからURLを読み込み、プレースホルダーを置換
+          # sedコマンドでURL内の特殊文字をエスケープして安全に置換する
+          URL_TO_REPLACE="YOUR_GOOGLE_FORM_URL_HERE"
+          SECRET_URL="${{ secrets.GOOGLE_FORM_URL }}"
+          sed -i "s|${URL_TO_REPLACE}|${SECRET_URL}|g" config.js
+        shell: bash
+
+      # 3. GitHub Pagesにデプロイするための設定
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # 4. デプロイするファイルをアーティファクトとしてアップロード
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # プロジェクトのルートディレクトリ全体をアップロード
+
+      # 5. GitHub Pagesにデプロイを実行
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
