@@ -50,3 +50,16 @@ button[type="button"] {
   color: white;
   border-color: #6c757d;
 }
+
+/* スマートフォン表示用のスタイル */
+@media (max-width: 600px) {
+  .button-container {
+    display: flex;
+    flex-direction: column; /* ボタンを縦に並べる */
+    gap: 15px; /* ボタン間の余白 */
+  }
+
+  .button-container button {
+    width: 100%; /* ボタンの幅を親要素に合わせる */
+  }
+}

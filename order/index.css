@@ -78,4 +78,8 @@ section {
     padding-top: 10px; /* 開いたときに少し余白を入れる */
 }
 
-
+/* h2タグのスタイル調整 */
+h2 {
+    font-size: 1.17em; /* h3タグのデフォルトサイズに合わせる */
+    margin-block-start: 1em; /* 上下の余白を調整 */
+}
