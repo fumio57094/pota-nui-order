@@ -2,15 +2,20 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>入力内容のご確認</title>
+  <script src="config.js" defer></script>
   <link rel="stylesheet" href="03_confirm.css">
   <script src="03_confirm.js" defer></script>
 </head>
 <body>
   <h1>入力内容のご確認</h1>
-  <p>ご注文内容をご確認の上、お間違いがなければ「お支払いに進む」ボタンを押してください。</p>
+  <p>ご注文内容をご確認の上、お間違いがなければ次の手順で注文情報を送信してください。<br>
+   1.「この内容をコピーする」ボタンを押して注文情報をコピーしてください。<br>
+   2. 「注文フォームへ」ボタンを押すとGoogleフォームが開きます。コピーした内容をペーストし、フォームを送信してください。<br><br>
+   注文フォームの内容を確認後、決済リンクを記載したメールをお送りいたします。
+  </p>
 
+<div id="order-summary">
   <section>
     <h2>ご注文商品</h2>
     <ul id="orderList">
@@ -51,10 +56,23 @@
     </dl>
   </section>
 
-  <form id="finalOrderForm" action="04_payment.html">
-    <button type="button" id="backToAddressButton">入力画面に戻る</button>
-    <button type="submit">お支払いに進む</button>
-  </form>
+  <section>
+    <h2>注文番号</h2>
+    <dd id="orderId"></dd>
+  </section>
+</div>
+
+<div class="button-group">
+  <button type="green_button" onclick="copyOrderSummary()">この内容をコピーする</button>
+  <a id="googleFormLink" href="#" target="_blank">
+    <button type="green_button">注文フォームへ</button>
+  </a>
+</div>
+
+<div class="back-button">
+  <button type="gray_button" onclick="history.back()">入力画面に戻る</button>
+</div>
+
 
 </body>
 </html>

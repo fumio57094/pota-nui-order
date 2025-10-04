@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>配送先情報のご入力</title>
   <link rel="stylesheet" href="02_address.css">
   <style>
@@ -28,17 +27,18 @@
     #calculateShippingFeeButton {
       margin-top: 20px; /* ボタンの上に余白を追加 */
     }
+    .button-container {
+      margin-top: 30px;
+    }
     .display-value {
       font-size: 16px;
       padding: 8px;
       background-color: #e9ecef;
       border: 1px solid #ced4da;
       border-radius: 4px;
-      width: 100%;
-      max-width: 300px;
+      width: 300px;
       margin: 5px 0 0 0;
       min-height: 1.5em;
-      box-sizing: border-box; /* paddingを含めて幅を計算 */
     }
   </style>
   <script src="02_address.js" defer></script>
@@ -105,7 +105,7 @@
 
     <div class="form-group">
       <label for="tel">電話番号：<span class="optional-badge">任意</span></label><br>
-      <input type="tel" id="tel" name="tel" size="30" placeholder="例：0123456789" />
+      <input type="tel" id="tel" name="tel" size="30" placeholder="例：012-345-6789" />
       <p class="form-note">電話番号のご入力は任意ですが、なんらかの理由で配達が行えなかった場合に配送業者から連絡ができるよう、なるべくご入力ください。</p>
     </div>
 

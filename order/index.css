@@ -5,13 +5,6 @@ body {
   padding: 20px;
 }
 
-/* 見出し(h2, h3)と商品ラベルのフォントサイズを本文と同じ大きさに統一 */
-h2,
-h3,
-.product label {
-  font-size: 1em;
-}
-
 /* 商品ごとのコンテナ設定 */
 .product {
   display: flex;          /* Flexboxレイアウトを有効にする */
@@ -84,3 +77,5 @@ section {
     display: block;
     padding-top: 10px; /* 開いたときに少し余白を入れる */
 }
+
+

@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>商品注文画面</title>
   <link rel="stylesheet" href="index.css">
   <script src="index.js" defer></script>
@@ -27,6 +26,13 @@
       background-color: #6c757d;
       color: white;
       border-color: #6c757d;
+    }
+    .action-buttons {
+      display: flex;
+      flex-direction: column; /* ボタンを縦に並べる */
+      gap: 10px; /* ボタン間の余白 */
+      align-items: flex-start; /* ボタンを左揃えにする */
+      margin-bottom: 20px; /* ボタンエリアの下に余白を追加 */
     }
 
     /* プルダウンメニューの共通スタイル */
@@ -74,8 +80,11 @@
       </p>
     </section>
 
-    <!-- 合計金額確認ボタン -->
-    <button type="button" onclick="calculateTotal()">合計金額を確認する</button>
+    <!-- ボタンエリア -->
+    <div class="action-buttons">
+      <button type="button" class="clear-button" onclick="clearSelection()">選択をクリアする</button>
+      <button type="button" onclick="calculateTotal()">合計金額を確認する</button>
+    </div>
 
      <!-- 合計金額表示 -->
     <div>

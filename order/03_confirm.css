@@ -56,25 +56,24 @@ button {
   margin-right: 10px;
 }
 
-button[type="submit"] {
+button[type="green_button"] {
   background-color: #28a745;
   color: white;
   border-color: #28a745;
 }
 
-button[type="button"] {
+button[type="gray_button"] {
   background-color: #6c757d;
   color: white;
   border-color: #6c757d;
 }
 
-/* スマートフォン向けの表示調整 (画面幅が600px以下の場合に適用) */
-@media (max-width: 600px) {
-  dl {
-    grid-template-columns: 1fr; /* 画面が狭い場合は1カラム表示に切り替え */
-    gap: 5px 0;
-  }
-  dd {
-    margin-bottom: 10px; /* 各項目の下に少し余白を追加 */
-  }
+.button-group {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.back-button {
+  margin-top: 1.5em;
 }

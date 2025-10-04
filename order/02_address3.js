@@ -212,6 +212,24 @@ function calculateShippingFee() {
   sessionStorage.setItem('shippingFee', shippingFee);
   sessionStorage.setItem('grandTotal', grandTotal);
 
+  // --- 注文番号を生成 ---
+  // 注文番号がまだ生成されていない場合のみ、新しい番号を生成する
+  if (!sessionStorage.getItem('orderId')) {
+    const generateOrderId = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      // 重複確率をさらに下げるためのランダムな文字列
+      const randomPart = Math.random().toString(36).slice(-5).toUpperCase();
+      return `${year}${month}${day}-${hours}${minutes}${seconds}-${randomPart}`;
+    };
+    sessionStorage.setItem('orderId', generateOrderId());
+  }
+
   // 計算済みフラグを立てる
   isShippingFeeCalculated = true;
   return true;

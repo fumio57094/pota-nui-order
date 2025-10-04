@@ -242,6 +242,30 @@ function groupProducts(products) {
 }
 
 /**
+ * 選択された商品の数量や表示をすべてリセットします。
+ */
+window.clearSelection = function() {
+  // すべての数量選択プルダウンを取得し、値を0（「------」）に戻す
+  const quantitySelects = document.querySelectorAll('.quantity');
+  quantitySelects.forEach(select => {
+    select.value = 0;
+  });
+
+  // コメント欄を空にする
+  document.querySelector('textarea[name="comment"]').value = '';
+
+  // 合計金額と合計サイズの表示をリセット
+  document.getElementById('totalPrice').textContent = '¥0';
+  // document.getElementById('totalSize').textContent = '0'; // 必要であればコメントを解除
+
+  // 配送方法のセクションを非表示に戻す
+  document.getElementById('shippingMethodContainer').style.display = 'none';
+
+  // 合計金額が未計算の状態に戻す
+  isTotalCalculated = false;
+}
+
+/**
  * 選択された商品の合計金額を計算し、表示します。
  * @returns {boolean} バリデーションに成功した場合はtrue、失敗した場合はfalse
  */
