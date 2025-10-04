@@ -60,6 +60,6 @@ button[type="button"] {
   }
 
   .button-container button {
-    width: 100%; /* ボタンの幅を親要素に合わせる */
+    width: 300px; /* ボタンの幅を入力欄と合わせる */
   }
 }
