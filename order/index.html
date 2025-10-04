@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>商品注文画面</title>
   <link rel="stylesheet" href="index.css">
   <script src="index.js" defer></script>
@@ -55,11 +56,12 @@
     /* コメント欄のスタイル */
     textarea[name="comment"] {
       width: 100%;
-      max-width: 600px; /* PCで見たときの最大幅 */
+      max-width: 300px; /* PCで見たときの最大幅を300pxに設定 */
       box-sizing: border-box; /* paddingとborderを幅に含める */
       padding: 8px;
       border: 1px solid #ced4da;
       border-radius: 4px;
+      font-size: 16px; /* 文字サイズを明示的に指定 */
     }
   </style>
 </head>
